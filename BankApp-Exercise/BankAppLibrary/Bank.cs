@@ -11,6 +11,8 @@ namespace BankAppLibrary
 
         public Bank(string name)
         {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             Name = name;
             Accounts = new Dictionary<Guid, Account>();
         }

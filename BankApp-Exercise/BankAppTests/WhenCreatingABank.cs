@@ -7,10 +7,6 @@ namespace BankAppTests
     public class WhenCreatingABank
     {
         private readonly string _bankName = "Default Bank";
-        [SetUp]
-        public void Setup()
-        {
-        }
 
         [Test]
         public void InstantiatedBankHasANameAnd0Accounts()
@@ -19,6 +15,12 @@ namespace BankAppTests
             Assert.AreEqual(_bankName, bank.Name);
             Assert.IsNotNull(bank.Accounts);
             Assert.AreEqual(0, bank.Accounts.Count);
+        }
+
+        [Test]
+        public void AndNameIsNullThenArgumentNullExceptionIsThrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Bank(null));
         }
 
         [Test]
