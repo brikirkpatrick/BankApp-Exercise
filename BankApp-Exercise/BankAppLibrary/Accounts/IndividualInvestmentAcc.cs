@@ -11,7 +11,7 @@ namespace BankAppLibrary
         // cant withdraw over 500
         // return bool? how to verify it's correct
         // maybe throw an exception?
-        public override float Withdraw(int amount)
+        public override decimal Withdraw(decimal amount)
         {
             if (amount > 500)
             {

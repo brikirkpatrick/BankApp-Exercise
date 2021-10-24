@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BankAppLibrary
 {
-    public class Bank
+    public class Bank : IBank
     {
         public string Name { get; }
         public Dictionary<Guid, Account> Accounts { get; private set; }
@@ -11,7 +11,8 @@ namespace BankAppLibrary
 
         public Bank(string name)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException($"{nameof(name)} cannot be null or empty");
+
 
             Name = name;
             Accounts = new Dictionary<Guid, Account>();
@@ -60,5 +61,31 @@ namespace BankAppLibrary
                 return null;
             }
         }
+
+        public bool DepositToAccount(Guid accId, float amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool WithdrawFromAccount(Guid accId, float amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TransferFromAccToAcc(Guid senderId, Guid receiverId, Bank bank, float amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        //Potential Methods
+        // DepositToAccount
+        // get account, call account.Withdraw
+
+        // WithdrawFromAccount
+        // get account, call account.Deposit
+
+        // TransferFromAccToAcc (tricky because require access to another bank)
+        // get fromAcc, toAcc, amount, Bank
+        // checking that withdraw is handled properly for certain accounts
     }
 }

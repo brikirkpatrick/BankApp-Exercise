@@ -7,10 +7,5 @@ namespace BankAppLibrary
         public CheckingAcc(string ownerName, Guid id) : base(ownerName, id, AccountType.Checking)
         {
         }
-
-        public override float Withdraw(int amount)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

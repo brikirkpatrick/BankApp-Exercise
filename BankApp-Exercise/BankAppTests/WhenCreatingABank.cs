@@ -7,20 +7,27 @@ namespace BankAppTests
     public class WhenCreatingABank
     {
         private readonly string _bankName = "Default Bank";
+        private Bank _bank;
+
+        [SetUp]
+        public void Setup()
+        {
+            _bank = new Bank(_bankName);
+        }
 
         [Test]
         public void InstantiatedBankHasANameAnd0Accounts()
         {
-            var bank = new Bank(_bankName);
-            Assert.AreEqual(_bankName, bank.Name);
-            Assert.IsNotNull(bank.Accounts);
-            Assert.AreEqual(0, bank.Accounts.Count);
+            Assert.AreEqual(_bankName, _bank.Name);
+            Assert.IsNotNull(_bank.Accounts);
+            Assert.AreEqual(0, _bank.Accounts.Count);
         }
 
         [Test]
-        public void AndNameIsNullThenArgumentNullExceptionIsThrown()
+        public void AndNameIsNullOrEmptyThenArgumentNullExceptionIsThrown()
         {
             Assert.Throws<ArgumentNullException>(() => new Bank(null));
+            Assert.Throws<ArgumentNullException>(() => new Bank(string.Empty));
         }
 
         [Test]
@@ -29,22 +36,20 @@ namespace BankAppTests
         [TestCase("CorpInvestAcc", AccountType.IndividualInvestment)]
         public void AddsANewAccountProperly(string ownerName, AccountType accType)
         {
-            var bank = new Bank(_bankName);
-            var newAcc = bank.AddNewAccount(ownerName, accType);
+            var newAcc = _bank.AddNewAccount(ownerName, accType);
             Assert.IsNotNull(newAcc);
             Assert.IsNotNull(newAcc.Id);
             Assert.AreEqual(newAcc.OwnerName, ownerName);
             Assert.AreEqual(newAcc.Type, accType);
 
-            var retrievedAcc = bank.Accounts[newAcc.Id];
+            var retrievedAcc = _bank.Accounts[newAcc.Id];
             Assert.AreEqual(newAcc, retrievedAcc);
         }
 
         [Test]
-        public void ThrowsExceptionForUnsupportedAccountTypes()
+        public void AddNewAccThrowsExceptionForUnsupportedAccountTypes()
         {
-            var bank = new Bank(_bankName);
-            Assert.Throws<NotSupportedException>(() => bank.AddNewAccount("UnsupportedAcc", AccountType.Unsupported));
+            Assert.Throws<NotSupportedException>(() => _bank.AddNewAccount("UnsupportedAcc", AccountType.Unsupported));
         }
     }
 }
