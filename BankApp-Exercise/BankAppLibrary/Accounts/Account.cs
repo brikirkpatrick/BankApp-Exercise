@@ -12,7 +12,8 @@ namespace BankAppLibrary
     // TODO: Big, how to handle decimal numbers where more than 2 decimal points? remember to adjust tests for this.
     // TODO: consider abstracts folder or project for interfaces and enums?
     // TODO: consider handling of name (like first + last) but this seems outta scope of requirements
-    public class Account
+    // TODO: Overdraft and handling/testing? may be moot
+    public abstract class Account
     {
         public string OwnerName { get; }
         public Guid Id { get; }
@@ -37,8 +38,8 @@ namespace BankAppLibrary
             Balance = Balance + amount;
         }
 
-        // Should this remove from balance and return amount withdrawn?
-        // need to see if funds are abled to be withdrawn.
+        /// Withdraws a specified amount from an account
+        /// Returns the amount withdrawn.
         public virtual decimal Withdraw(decimal amount)
         {
             if (amount < 0M) throw new ArgumentException($"{nameof(amount)} must be a positive decimal.");

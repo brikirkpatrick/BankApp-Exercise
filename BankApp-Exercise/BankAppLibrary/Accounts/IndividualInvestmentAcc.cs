@@ -9,18 +9,12 @@ namespace BankAppLibrary
         {
         }
 
-        // cant withdraw over 500
-        // return bool? how to verify it's correct
-        // maybe throw an exception?
+        /// Individual accounts have a withdrawal limit of 500 dollars.
         public override decimal Withdraw(decimal amount)
         {
-            if (amount > 500)
-            {
-                return 0;
-            }
+            if (amount > 500M) throw new ArgumentOutOfRangeException(nameof(amount), "individual accounts have a withdrawal limit of $500");
 
-            Balance = Balance - amount;
-            return Balance;
+            return base.Withdraw(amount);
         }
     }
 }

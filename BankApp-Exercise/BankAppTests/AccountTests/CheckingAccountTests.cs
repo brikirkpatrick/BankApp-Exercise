@@ -8,17 +8,18 @@ namespace BankAppTests
     {
         private CheckingAcc _checkingAcc;
         private Guid _accountId = Guid.NewGuid();
+        private readonly string _ownerName = "CheckingOwner";
 
         [SetUp]
         public void Setup()
         {
-            _checkingAcc = new CheckingAcc("CheckingOwner", _accountId);
+            _checkingAcc = new CheckingAcc(_ownerName, _accountId);
         }
 
         [Test]
         public void ExceptionsAreThrownForBadParams()
         {
-            Assert.Throws<ArgumentNullException>(() => new CheckingAcc("CheckingOwner", Guid.Empty));
+            Assert.Throws<ArgumentNullException>(() => new CheckingAcc(_ownerName, Guid.Empty));
             Assert.Throws<ArgumentNullException>(() => new CheckingAcc(string.Empty, Guid.NewGuid()));
             Assert.Throws<ArgumentNullException>(() => new CheckingAcc(null, Guid.NewGuid()));
             Assert.Throws<ArgumentNullException>(() => new CheckingAcc(null, Guid.Empty));
@@ -28,7 +29,7 @@ namespace BankAppTests
         public void ConstructorIsProperlyInitialized()
         {
             Assert.IsNotNull(_checkingAcc.Id);
-            Assert.AreEqual("CheckingOwner", _checkingAcc.OwnerName);
+            Assert.AreEqual(_ownerName, _checkingAcc.OwnerName);
             Assert.AreEqual(0, _checkingAcc.Balance);
             Assert.AreEqual(AccountType.Checking, _checkingAcc.Type);
             Assert.IsNotNull(_checkingAcc.Id);
