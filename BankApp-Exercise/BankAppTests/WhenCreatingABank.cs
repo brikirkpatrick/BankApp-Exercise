@@ -1,4 +1,5 @@
 using BankAppLibrary;
+using BankAppLibrary.Accounts;
 using NUnit.Framework;
 using System;
 
@@ -31,25 +32,39 @@ namespace BankAppTests
         }
 
         [Test]
-        [TestCase("CheckingAcc", AccountType.Checking)]
-        [TestCase("IndInvestAcc", AccountType.CorportateInvestment)]
-        [TestCase("CorpInvestAcc", AccountType.IndividualInvestment)]
-        public void AddsANewAccountProperly(string ownerName, AccountType accType)
+        public void AddsANewCheckingAccountProperly()
         {
-            var newAcc = _bank.AddNewAccount(ownerName, accType);
+            var ownerName = "CheckingAcc";
+            var newAcc = _bank.AddNewCheckingAccount(ownerName);
             Assert.IsNotNull(newAcc);
             Assert.IsNotNull(newAcc.Id);
-            Assert.AreEqual(newAcc.OwnerName, ownerName);
-            Assert.AreEqual(newAcc.Type, accType);
+            Assert.AreEqual(ownerName, newAcc.OwnerName);
+            Assert.AreEqual(AccountType.Checking, newAcc.Type);
 
             var retrievedAcc = _bank.Accounts[newAcc.Id];
             Assert.AreEqual(newAcc, retrievedAcc);
         }
 
         [Test]
-        public void AddNewAccThrowsExceptionForUnsupportedAccountTypes()
+        [TestCase("IndInvestAcc", InvestmentAccType.Individual)]
+        [TestCase("CorpInvestAcc", InvestmentAccType.Corporate)]
+        public void AddsANewInvestmentAccountProperly(string ownerName, InvestmentAccType invType)
         {
-            Assert.Throws<NotSupportedException>(() => _bank.AddNewAccount("UnsupportedAcc", AccountType.Unsupported));
+            var newAcc = _bank.AddNewInvestmentAccount(ownerName, invType);
+            Assert.IsNotNull(newAcc);
+            Assert.IsNotNull(newAcc.Id);
+            Assert.AreEqual(ownerName, newAcc.OwnerName);
+            Assert.AreEqual(invType, newAcc.InvestmentType);
+            Assert.AreEqual(AccountType.Investment, newAcc.Type);
+
+            var retrievedAcc = _bank.Accounts[newAcc.Id];
+            Assert.AreEqual(newAcc, retrievedAcc);
+        }
+
+        [Test]
+        public void AddNewInvestAccThrowsExceptionForUnsupportedType()
+        {
+            Assert.Throws<NotSupportedException>(() => _bank.AddNewInvestmentAccount("UnsupportedAcc", InvestmentAccType.Unsupported));
         }
     }
 }

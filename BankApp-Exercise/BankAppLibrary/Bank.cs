@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankAppLibrary.Accounts;
+using System;
 using System.Collections.Generic;
 
 namespace BankAppLibrary
@@ -24,27 +25,38 @@ namespace BankAppLibrary
          * Returns an Account object which will have relevant account information.
          * The idea is that the user should keep track of this information (name, Id, type) for later use.
          */
-        public Account AddNewAccount(string ownerName, AccountType type)
+        public CheckingAcc AddNewCheckingAccount(string ownerName)
         {
             var newAccId = Guid.NewGuid();
             if (!Accounts.ContainsKey(newAccId))
             {
-                Account account;
-                switch (type)
-                {
-                    case AccountType.Checking:
-                        account = new CheckingAcc(ownerName, newAccId);
-                        break;
+                CheckingAcc account = new CheckingAcc(ownerName, newAccId);
+                Accounts.Add(account.Id, account);
+                return account;
+            }
+            else 
+            {
+                return null;
+            }
+        }
 
-                    case AccountType.CorportateInvestment:
+        public InvestmentAccount AddNewInvestmentAccount(string ownerName, InvestmentAccType invType)
+        {
+            var newAccId = Guid.NewGuid();
+            if (!Accounts.ContainsKey(newAccId))
+            {
+                InvestmentAccount account;
+                switch (invType)
+                {
+                    case InvestmentAccType.Corporate:
                         account = new CorporateInvestmentAcc(ownerName, newAccId);
                         break;
 
-                    case AccountType.IndividualInvestment:
+                    case InvestmentAccType.Individual:
                         account = new IndividualInvestmentAcc(ownerName, newAccId);
                         break;
                     default:
-                        throw new NotSupportedException($"Account Type '{type}' is not supported.");
+                        throw new NotSupportedException($"investment account type '{invType}' is not supported.");
                 }
 
                 if (account == null)
@@ -56,7 +68,7 @@ namespace BankAppLibrary
                 Accounts.Add(account.Id, account);
                 return account;
             }
-            else 
+            else
             {
                 return null;
             }

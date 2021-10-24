@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BankAppLibrary
 {
     public enum AccountType
     {
         Checking,
-        IndividualInvestment,
-        CorportateInvestment,
-        Unsupported
+        Investment,
+        Unsupported // TODO: reconsider keeping this and Investment Unsupported. Literally only exists for testing.
     }
 
-    // TODO: Big, how to handle decimal numbers where more than 2 decimal points?
-    // remember to adjust tests for this.
+    // TODO: Big, how to handle decimal numbers where more than 2 decimal points? remember to adjust tests for this.
+    // TODO: consider abstracts folder or project for interfaces and enums?
     // TODO: consider handling of name (like first + last) but this seems outta scope of requirements
     public class Account
     {

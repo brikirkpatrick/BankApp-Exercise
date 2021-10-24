@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BankAppLibrary.Accounts;
+using System;
 
 namespace BankAppLibrary
 {
-    public class IndividualInvestmentAcc : Account
+    public class IndividualInvestmentAcc : InvestmentAccount
     {
-        public IndividualInvestmentAcc(string ownerName, Guid id) : base(ownerName, id, AccountType.IndividualInvestment)
+        public IndividualInvestmentAcc(string ownerName, Guid id) : base(ownerName, id, InvestmentAccType.Individual)
         {
         }
 
