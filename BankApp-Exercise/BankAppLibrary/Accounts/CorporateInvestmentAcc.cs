@@ -5,7 +5,7 @@ namespace BankAppLibrary
 {
     public class CorporateInvestmentAcc : InvestmentAccount
     {
-        public CorporateInvestmentAcc(string ownerName, Guid id, Bank bank) : base(ownerName, id, bank, InvestmentAccType.Corporate)
+        public CorporateInvestmentAcc(string ownerName, Guid id, IBank bank) : base(ownerName, id, bank, InvestmentAccType.Corporate)
         {
         }
     }

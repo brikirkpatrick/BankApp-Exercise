@@ -7,7 +7,7 @@ namespace BankAppTests
     public class WhenCreatingACheckingAccount
     {
         private CheckingAcc _checkingAcc;
-        private Bank _testBank;
+        private IBank _testBank;
         private Guid _accountId = Guid.NewGuid();
         private readonly string _ownerName = "CheckingOwner";
 

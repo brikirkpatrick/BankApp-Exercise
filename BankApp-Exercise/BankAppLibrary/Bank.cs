@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace BankAppLibrary
 {
-    public class Bank
+    public class Bank : IBank
     {
         public string Name { get; }
         public Guid RoutingId { get; }
         public Dictionary<Guid, Account> Accounts { get; private set; }
-        public RoutingSystem RoutingSystem { get; set; }
+        public IRoutingSystem RoutingSystem { get; set; }
 
         public Bank(string name)
         {

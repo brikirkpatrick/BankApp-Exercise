@@ -13,7 +13,7 @@ namespace BankAppLibrary.Accounts
     {
         public InvestmentAccType InvestmentType{ get; }
 
-        public InvestmentAccount(string ownerName, Guid id, Bank bank, InvestmentAccType investmentType) : base(ownerName, id, AccountType.Investment, bank)
+        public InvestmentAccount(string ownerName, Guid id, IBank bank, InvestmentAccType investmentType) : base(ownerName, id, AccountType.Investment, bank)
         {
             InvestmentType = investmentType;
         }

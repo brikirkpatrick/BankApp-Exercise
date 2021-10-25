@@ -8,7 +8,7 @@ namespace BankAppTests.AccountTests
     public class IndividualInvestmentAccTests
     {
         private IndividualInvestmentAcc _indAcc;
-        private Bank _testBank;
+        private IBank _testBank;
         private Guid _accountId = Guid.NewGuid();
         private readonly string _ownerName = "IndInvestmentOwner";
 
