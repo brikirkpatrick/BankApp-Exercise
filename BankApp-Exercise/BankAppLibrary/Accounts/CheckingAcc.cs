@@ -4,7 +4,7 @@ namespace BankAppLibrary
 {
     public class CheckingAcc : Account
     {
-        public CheckingAcc(string ownerName, Guid id) : base(ownerName, id, AccountType.Checking)
+        public CheckingAcc(string ownerName, Guid id, Bank bank) : base(ownerName, id, AccountType.Checking, bank)
         {
         }
     }

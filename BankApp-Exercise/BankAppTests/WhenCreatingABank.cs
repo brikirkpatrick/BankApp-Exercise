@@ -17,10 +17,12 @@ namespace BankAppTests
         }
 
         [Test]
-        public void InstantiatedBankHasANameAnd0Accounts()
+        public void InstantiatedBankHasExpectedPropertiesSet()
         {
             Assert.AreEqual(_bankName, _bank.Name);
+            Assert.IsNotNull(_bank.RoutingId);
             Assert.IsNotNull(_bank.Accounts);
+            Assert.IsNull(_bank.RoutingSystem);
             Assert.AreEqual(0, _bank.Accounts.Count);
         }
 
@@ -35,7 +37,7 @@ namespace BankAppTests
         public void AddsANewCheckingAccountProperly()
         {
             var ownerName = "CheckingAcc";
-            var newAcc = _bank.AddNewCheckingAccount(ownerName);
+            var newAcc = _bank.RegisterNewCheckingAccount(ownerName);
             Assert.IsNotNull(newAcc);
             Assert.IsNotNull(newAcc.Id);
             Assert.AreEqual(ownerName, newAcc.OwnerName);
@@ -50,7 +52,7 @@ namespace BankAppTests
         [TestCase("CorpInvestAcc", InvestmentAccType.Corporate)]
         public void AddsANewInvestmentAccountProperly(string ownerName, InvestmentAccType invType)
         {
-            var newAcc = _bank.AddNewInvestmentAccount(ownerName, invType);
+            var newAcc = _bank.RegisterNewInvestmentAccount(ownerName, invType);
             Assert.IsNotNull(newAcc);
             Assert.IsNotNull(newAcc.Id);
             Assert.AreEqual(ownerName, newAcc.OwnerName);
@@ -64,7 +66,7 @@ namespace BankAppTests
         [Test]
         public void AddNewInvestAccThrowsExceptionForUnsupportedType()
         {
-            Assert.Throws<NotSupportedException>(() => _bank.AddNewInvestmentAccount("UnsupportedAcc", InvestmentAccType.Unsupported));
+            Assert.Throws<NotSupportedException>(() => _bank.RegisterNewInvestmentAccount("UnsupportedAcc", InvestmentAccType.Unsupported));
         }
     }
 }
