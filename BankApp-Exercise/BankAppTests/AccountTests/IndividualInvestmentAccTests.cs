@@ -64,7 +64,7 @@ namespace BankAppTests.AccountTests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => _indAcc.Withdraw(600M));
             Assert.Throws<ArgumentOutOfRangeException>(() => _indAcc.Withdraw(-0.01M));
-            Assert.Throws<InvalidOperationException>(() => _indAcc.Withdraw(0.01M));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _indAcc.Withdraw(0));
         }
     }
 }
