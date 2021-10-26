@@ -1,4 +1,5 @@
 ﻿using BankAppLibrary;
+using BankAppLibrary.Accounts;
 using BankAppTests.Helpers;
 using NUnit.Framework;
 using System;
@@ -180,10 +181,10 @@ namespace BankAppTests.AccountTests
             acc1.Deposit(500);
             var acc2 = _secondBank.GetAccountById(_accIdDictionary[_secondBank.Name][0]);
 
-            // bad routingId
+            // routingId isn't found
             Assert.Throws<KeyNotFoundException>(() => acc1.ExternalTransfer(Guid.NewGuid(), acc2.Id, 500));
 
-            // bad accountId
+            // accountId isn't found
             Assert.Throws<KeyNotFoundException>(() => acc1.ExternalTransfer(acc2.RoutingId, Guid.NewGuid(), 500));
 
             // amount > sender Balance
@@ -192,7 +193,7 @@ namespace BankAppTests.AccountTests
             // amount is not a positive decimal
             Assert.Throws<ArgumentOutOfRangeException>(() => acc1.ExternalTransfer(acc2.RoutingId, acc2.Id, -0.01M));
 
-            // routingSystem is null
+            // bank never registed with a routingSystem. bank.routingSystem is null
             var badBank = new Bank("NonRegisteredBank");
             var acc3 = badBank.RegisterNewCheckingAccount("CheckingAcc");
             acc3.Deposit(500);

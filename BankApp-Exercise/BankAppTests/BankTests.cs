@@ -5,7 +5,7 @@ using System;
 
 namespace BankAppTests
 {
-    public class WhenCreatingABank
+    public class BankTests
     {
         private readonly string _bankName = "Default Bank";
         private IBank _bank;
@@ -28,7 +28,7 @@ namespace BankAppTests
         }
 
         [Test]
-        public void AndNameIsNullOrEmptyThenArgumentNullExceptionIsThrown()
+        public void BadConstructorParamsThrowExceptions()
         {
             Assert.Throws<ArgumentNullException>(() => new Bank(null));
             Assert.Throws<ArgumentNullException>(() => new Bank(string.Empty));
@@ -37,7 +37,7 @@ namespace BankAppTests
         [Test]
         public void RegistersANewCheckingAccountProperly()
         {
-            var ownerName = "CheckingAcc";
+            var ownerName = "CheckingOwner";
             var newAcc = _bank.RegisterNewCheckingAccount(ownerName);
             Assert.IsNotNull(newAcc);
             Assert.IsNotNull(newAcc.Id);
@@ -49,8 +49,8 @@ namespace BankAppTests
         }
 
         [Test]
-        [TestCase("IndInvestAcc", InvestmentAccType.Individual)]
-        [TestCase("CorpInvestAcc", InvestmentAccType.Corporate)]
+        [TestCase("IndInvestOwner", InvestmentAccType.Individual)]
+        [TestCase("CorpInvestOwner", InvestmentAccType.Corporate)]
         public void RegistersNewInvestmentAccountsProperly(string ownerName, InvestmentAccType invType)
         {
             var newAcc = _bank.RegisterNewInvestmentAccount(ownerName, invType);
@@ -67,7 +67,7 @@ namespace BankAppTests
         [Test]
         public void RegisterNewInvestAccThrowsExceptionForUnsupportedType()
         {
-            Assert.Throws<NotSupportedException>(() => _bank.RegisterNewInvestmentAccount("UnsupportedAcc", InvestmentAccType.Unsupported));
+            Assert.Throws<NotSupportedException>(() => _bank.RegisterNewInvestmentAccount("UnsupportedOwner", InvestmentAccType.Unsupported));
         }
     }
 }

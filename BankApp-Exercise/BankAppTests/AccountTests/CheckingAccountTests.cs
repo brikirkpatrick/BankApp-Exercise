@@ -1,10 +1,11 @@
 ﻿using BankAppLibrary;
+using BankAppLibrary.Accounts;
 using NUnit.Framework;
 using System;
 
-namespace BankAppTests
+namespace BankAppTests.AccountTests
 {
-    public class WhenCreatingACheckingAccount
+    public class CheckingAccountTests
     {
         private CheckingAcc _checkingAcc;
         private IBank _testBank;

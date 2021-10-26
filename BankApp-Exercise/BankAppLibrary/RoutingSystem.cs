@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BankAppLibrary.Accounts;
+using System;
 using System.Collections.Generic;
 
 namespace BankAppLibrary
 {
-    // Mediator Class https://www.dofactory.com/net/mediator-design-pattern
+    // A mediator for communication between banks.
     public class RoutingSystem : IRoutingSystem
     {
         private Dictionary<Guid, IBank> _banks = new Dictionary<Guid, IBank>();
@@ -17,6 +18,13 @@ namespace BankAppLibrary
             bank.RoutingSystem = this;
         }
 
+        /// <summary>
+        ///  Transfers funds between external accounts.
+        /// </summary>
+        /// <param name="sender">the sender account</param>
+        /// <param name="recipientRoute">recipient routing id</param>
+        /// <param name="recipientId">recipient account id</param>
+        /// <param name="amount">the amount transferred</param>
         public void ExternalTransfer(Account sender, Guid recipientRoute, Guid recipientId, decimal amount)
         {
             decimal withdrawAmt = 0M;
@@ -30,7 +38,6 @@ namespace BankAppLibrary
             }
             catch(Exception ex)
             {
-                // TODO: see if possible tot est for this balance not changing.
                 if (ex is ArgumentOutOfRangeException || ex is InvalidOperationException)
                 {
                     // the deposit failed so re-deposit the withdrawal

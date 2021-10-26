@@ -1,9 +1,8 @@
-﻿using BankAppLibrary.Accounts;
-using System;
+﻿using System;
 
-namespace BankAppLibrary
+namespace BankAppLibrary.Accounts
 {
-    public class CorporateInvestmentAcc : InvestmentAccount
+    public class CorporateInvestmentAcc : InvestmentAcc
     {
         public CorporateInvestmentAcc(string ownerName, Guid id, IBank bank) : base(ownerName, id, bank, InvestmentAccType.Corporate)
         {

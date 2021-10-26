@@ -9,11 +9,11 @@ namespace BankAppLibrary.Accounts
         Unsupported
     }
 
-    public abstract class InvestmentAccount : Account
+    public abstract class InvestmentAcc : Account
     {
         public InvestmentAccType InvestmentType{ get; }
 
-        public InvestmentAccount(string ownerName, Guid id, IBank bank, InvestmentAccType investmentType) : base(ownerName, id, AccountType.Investment, bank)
+        public InvestmentAcc(string ownerName, Guid id, IBank bank, InvestmentAccType investmentType) : base(ownerName, id, AccountType.Investment, bank)
         {
             InvestmentType = investmentType;
         }

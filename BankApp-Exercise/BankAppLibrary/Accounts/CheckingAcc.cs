@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BankAppLibrary
+namespace BankAppLibrary.Accounts
 {
     public class CheckingAcc : Account
     {

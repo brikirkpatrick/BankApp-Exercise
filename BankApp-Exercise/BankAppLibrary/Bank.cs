@@ -20,6 +20,11 @@ namespace BankAppLibrary
             Accounts = new Dictionary<Guid, Account>();
         }
 
+        /// <summary>
+        ///  Searches and returns an account if it exists within the bank.
+        /// </summary>
+        /// <param name="accId">account id of the account</param>
+        /// <returns></returns>
         public Account GetAccountById(Guid accId)
         {
             if (!Accounts.TryGetValue(accId, out Account acc))
@@ -30,10 +35,11 @@ namespace BankAppLibrary
             return acc;
         }
 
-        // TODO: make key more unique to handle rare cases.
-        /// Registers a new checking account provided ownerName.
-        /// Returns a CheckingAcc object which will have relevant account information.
-        /// The idea is that the user should keep track of this information (name, Id, type) for later use.
+        /// <summary>
+        ///  Registers a new checking account and returns a CheckingAcc object which will have relevant account information.
+        /// </summary>
+        /// <param name="ownerName">name of the account owner</param>
+        /// <returns></returns>
         public CheckingAcc RegisterNewCheckingAccount(string ownerName)
         {
             var newAccId = Guid.NewGuid();
@@ -49,15 +55,18 @@ namespace BankAppLibrary
             }
         }
 
-        /// Registers a new Investment account provided ownerName and InvestmentAccType.
-        /// Returns a InvestmentAccount object which will have relevant account information.
-        /// The idea is that the user should keep track of this information (name, Id, type) for later use.
-        public InvestmentAccount RegisterNewInvestmentAccount(string ownerName, InvestmentAccType invType)
+        /// <summary>
+        ///  Registers a new investment account and returns a InvestmentAcc object which will have relevant account information.
+        /// </summary>
+        /// <param name="ownerName">name of the account owner</param>
+        /// <param name="invType">the type of investment account to register</param>
+        /// <returns></returns>
+        public InvestmentAcc RegisterNewInvestmentAccount(string ownerName, InvestmentAccType invType)
         {
             var newAccId = Guid.NewGuid();
             if (!Accounts.ContainsKey(newAccId))
             {
-                InvestmentAccount account;
+                InvestmentAcc account;
                 switch (invType)
                 {
                     case InvestmentAccType.Corporate:

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BankAppLibrary
+namespace BankAppLibrary.Accounts
 {
     public enum AccountType
     {
@@ -11,13 +11,12 @@ namespace BankAppLibrary
     // TODO: Make note of passed considerations in ReadMe
     // - Overdraft
     // - OwnerName + BankName sanitization
+    // - RoutingSystem using property injection
+    // - Bank as a param for Account constructor (why'd I do it?)
+    // - I'm going with the assumption that a withdraw > 500 is ok if  account is transferring
+    // - Are the Guids I'm using unique enough? Should I improve on uniqueness?
 
-    // TODO: proper code comments for intellisense (see Deposit)
-    // TODO: Big, how to handle decimal numbers where more than 2 decimal points? remember to adjust tests for this.
-    // TODO: consider abstracts folder or project for interfaces and enums?
-    // TODO: is there ANY benefit to an IAccount interface?
-    // TODO: Should we be able to RegisterAcc if RoutingSystem is null? I think yes...
-    public abstract class Account
+    public abstract class Account : IAccount
     {
         private IBank _bank;
         public string OwnerName { get; }
@@ -26,17 +25,15 @@ namespace BankAppLibrary
         public AccountType Type { get; }
         public decimal Balance { get; protected set; }
 
-        // Note: Taking in Bank is kinda weird to me. 
-        // Needed for Transfers (Internal Accs + RoutingSystem for external accounts)
-        // Maybe realistically I'd take in like an accountRepository or something.
         public Account(string ownerName, Guid id, AccountType type, IBank bank)
         {
             if (string.IsNullOrWhiteSpace(ownerName)) throw new ArgumentNullException(nameof(ownerName), "cannot be null or empty");
             if (id == null || id == Guid.Empty) throw new ArgumentNullException(nameof(id), "cannot be null or empty");
-            if (bank == null) throw new ArgumentNullException(nameof(bank), "cannot be null.");
+            if (bank == null) throw new ArgumentNullException(nameof(bank), "cannot be null");
+            if (bank.RoutingId == null) throw new ArgumentNullException(nameof(bank.RoutingId), "cannot be null");
 
             _bank = bank;
-            RoutingId = _bank.RoutingId; // TODO: what if RoutingId is null?
+            RoutingId = bank.RoutingId;
             OwnerName = ownerName;
             Id = id;
             Type = type;
@@ -44,41 +41,54 @@ namespace BankAppLibrary
         }
 
         /// <summary>
-        ///  Deposits a positive amount to an account.
+        ///  Deposits an amount to an account
         /// </summary>
-        /// <param name="amount">a positive decimal.</param>
-        public virtual void Deposit(decimal amount) 
+        /// <param name="amount">the amount added to the balance</param>
+        public virtual void Deposit(decimal amount)
         {
-            if (amount <= 0M) throw new ArgumentOutOfRangeException($"{nameof(amount)} must be a positive decimal.");
+            if (amount <= 0M) throw new ArgumentOutOfRangeException($"{nameof(amount)} must be a positive decimal");
 
             Balance = Balance + amount;
         }
 
-        /// Withdraws a specified positive amount from an account and returns the amount withdrawn.
-        /// isTransferring is an optional parameter for handling transfer-withdraw cases.
+        /// <summary>
+        ///  Withdraws a specified amount from an account and returns the amount withdrawn.
+        /// </summary>
+        /// <param name="amount">the amount added to the balance</param>
+        /// <param name="isTransferring">an optional parameter for handling transfer-withdraw cases</param>
+        /// <returns></returns>
         public virtual decimal Withdraw(decimal amount, bool isTransferring = false)
         {
-            if (amount <= 0M) throw new ArgumentOutOfRangeException(nameof(amount), "amount must be a positive decimal.");
-            if (amount > Balance) throw new ArgumentOutOfRangeException(nameof(amount), "amount to withdraw is greater than current account balance.");
+            if (amount <= 0M) throw new ArgumentOutOfRangeException(nameof(amount), "amount must be a positive decimal");
+            if (amount > Balance) throw new ArgumentOutOfRangeException(nameof(amount), "amount to withdraw is greater than current account balance");
 
             Balance = Balance - amount;
             return amount;
         }
 
-        /// Transfer an amount internally provided recipient account Id.
-        public virtual void InternalTransfer(Guid recipientId, decimal amount) 
+        /// <summary>
+        ///  Transfers an amount to an internal account.
+        /// </summary>
+        /// <param name="recipientId">recipient account id</param>
+        /// <param name="amount">the amount transferred</param>
+        public virtual void InternalTransfer(Guid recipientId, decimal amount)
         {
             var receiver = _bank.GetAccountById(recipientId);
             decimal withdrawAmt = this.Withdraw(amount, true);
             receiver.Deposit(withdrawAmt);
         }
 
-        /// Transfer an amount externally provided recipient routingId and accountId.
+        /// <summary>
+        ///  Transfers an amount to an external account.
+        /// </summary>
+        /// <param name="recipientRoute">recipient routing id</param>
+        /// <param name="recipientId">recipient account id</param>
+        /// <param name="amount">the amount transferred</param>
         public virtual void ExternalTransfer(Guid recipientRoute, Guid recipientId, decimal amount)
         {
             if (_bank.RoutingSystem == null)
             {
-                throw new NullReferenceException("the bank associated with this account is not registered to a routingSystem.");
+                throw new NullReferenceException("the bank associated with this account is not registered to a routingSystem");
             }
 
             _bank.RoutingSystem.ExternalTransfer(this, recipientRoute, recipientId, amount);

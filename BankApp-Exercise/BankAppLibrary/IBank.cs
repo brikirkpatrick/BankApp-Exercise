@@ -13,6 +13,6 @@ namespace BankAppLibrary
 
         Account GetAccountById(Guid accId);
         CheckingAcc RegisterNewCheckingAccount(string ownerName);
-        InvestmentAccount RegisterNewInvestmentAccount(string ownerName, InvestmentAccType invType);
+        InvestmentAcc RegisterNewInvestmentAccount(string ownerName, InvestmentAccType invType);
     }
 }
