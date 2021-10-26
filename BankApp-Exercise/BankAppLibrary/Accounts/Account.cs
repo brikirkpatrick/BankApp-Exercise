@@ -8,14 +8,6 @@ namespace BankAppLibrary.Accounts
         Investment
     }
 
-    // TODO: Make note of passed considerations in ReadMe
-    // - Overdraft
-    // - OwnerName + BankName sanitization
-    // - RoutingSystem using property injection
-    // - Bank as a param for Account constructor (why'd I do it?)
-    // - I'm going with the assumption that a withdraw > 500 is ok if  account is transferring
-    // - Are the Guids I'm using unique enough? Should I improve on uniqueness?
-
     public abstract class Account : IAccount
     {
         private IBank _bank;
@@ -73,9 +65,18 @@ namespace BankAppLibrary.Accounts
         /// <param name="amount">the amount transferred</param>
         public virtual void InternalTransfer(Guid recipientId, decimal amount)
         {
-            var receiver = _bank.GetAccountById(recipientId);
-            decimal withdrawAmt = this.Withdraw(amount, true);
-            receiver.Deposit(withdrawAmt);
+            var recipient = _bank.GetAccountById(recipientId);
+            decimal withdrawAmt = Withdraw(amount, true);
+            try
+            {
+                recipient.Deposit(withdrawAmt);
+            }
+            catch (Exception)
+            {
+                // the deposit failed so re-deposit the withdrawal
+                if (withdrawAmt > 0M) Deposit(amount);
+                throw;
+            }
         }
 
         /// <summary>

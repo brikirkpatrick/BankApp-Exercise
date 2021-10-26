@@ -9,7 +9,22 @@ namespace BankAppLibrary
         public string Name { get; }
         public Guid RoutingId { get; }
         public Dictionary<Guid, Account> Accounts { get; private set; }
-        public IRoutingSystem RoutingSystem { get; set; }
+
+        private IRoutingSystem _routingSystem;
+        public IRoutingSystem RoutingSystem { 
+            get 
+            { 
+                return _routingSystem; 
+            }
+            set
+            {
+                if (_routingSystem != null)
+                {
+                    _routingSystem.DeregisterBank(this);
+                }
+                _routingSystem = value;
+            } 
+        }
 
         public Bank(string name)
         {

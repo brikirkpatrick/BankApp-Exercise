@@ -9,6 +9,10 @@ namespace BankAppLibrary
     {
         private Dictionary<Guid, IBank> _banks = new Dictionary<Guid, IBank>();
 
+        /// <summary>
+        ///  Registers a bank to the routing system.
+        /// </summary>
+        /// <param name="bank">the bank to register</param>
         public void RegisterBank(IBank bank)
         {
             if (!_banks.ContainsValue(bank))
@@ -16,6 +20,15 @@ namespace BankAppLibrary
                 _banks[bank.RoutingId] = bank;
             }
             bank.RoutingSystem = this;
+        }
+
+        /// <summary>
+        ///  Deregisters a bank from the routing system.
+        /// </summary>
+        /// <param name="bank">the bank to register</param>
+        public void DeregisterBank(IBank bank)
+        {
+            _banks.Remove(bank.RoutingId);
         }
 
         /// <summary>
@@ -27,22 +40,18 @@ namespace BankAppLibrary
         /// <param name="amount">the amount transferred</param>
         public void ExternalTransfer(Account sender, Guid recipientRoute, Guid recipientId, decimal amount)
         {
-            decimal withdrawAmt = 0M;
             var recipientBank = GetBankByRoutingNum(recipientRoute);
             var recipient = recipientBank.GetAccountById(recipientId);
+            decimal withdrawAmt = sender.Withdraw(amount, true);
 
             try
             {
-                withdrawAmt = sender.Withdraw(amount, true);
                 recipient.Deposit(withdrawAmt);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                if (ex is ArgumentOutOfRangeException || ex is InvalidOperationException)
-                {
-                    // the deposit failed so re-deposit the withdrawal
-                    if (withdrawAmt != 0M) sender.Deposit(amount);
-                }
+                // the deposit failed so re-deposit the withdrawal
+                if (withdrawAmt > 0M) sender.Deposit(amount);
                 throw;
             }
         }
