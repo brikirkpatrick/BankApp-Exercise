@@ -107,7 +107,6 @@ namespace BankAppTests.AccountTests
             }
         }
 
-        // TODO: think of more test cases + how to test all account types
         [Test]
         public void InternalTransferSucceeds()
         {

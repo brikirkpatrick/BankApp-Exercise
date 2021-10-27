@@ -66,7 +66,12 @@ namespace BankAppLibrary
             }
             else
             {
-                return null;
+                // Realistically the Id should be guranteed unique so I'd consider creating a more unique Id approach
+                // But for the sake of this excercise I'll just create a new Guid.
+                newAccId = Guid.NewGuid();
+                CheckingAcc account = new CheckingAcc(ownerName, newAccId, this);
+                Accounts.Add(account.Id, account);
+                return account;
             }
         }
 
@@ -81,33 +86,38 @@ namespace BankAppLibrary
             var newAccId = Guid.NewGuid();
             if (!Accounts.ContainsKey(newAccId))
             {
-                InvestmentAcc account;
-                switch (invType)
-                {
-                    case InvestmentAccType.Corporate:
-                        account = new CorporateInvestmentAcc(ownerName, newAccId, this);
-                        break;
-
-                    case InvestmentAccType.Individual:
-                        account = new IndividualInvestmentAcc(ownerName, newAccId, this);
-                        break;
-                    default:
-                        throw new NotSupportedException($"investment account type '{invType}' is not supported.");
-                }
-
-                if (account == null)
-                {
-                    // TOOD: revisit this exception or handling this null. May not be necessary.
-                    throw new NullReferenceException("account is null");
-                }
-
+                var account = CreateInvestmentAccountByType(newAccId, ownerName, invType);
                 Accounts.Add(account.Id, account);
                 return account;
             }
             else
             {
-                return null;
+                // Realistically the Id should be guranteed unique so I'd consider creating a more unique Id approach
+                // But for the sake of this excercise I'll just create a new Guid.
+                newAccId = Guid.NewGuid();
+                var account = CreateInvestmentAccountByType(newAccId, ownerName, invType);
+                Accounts.Add(account.Id, account);
+                return account;
             }
+        }
+
+        private InvestmentAcc CreateInvestmentAccountByType(Guid newAccId, string ownerName, InvestmentAccType invType)
+        {
+            InvestmentAcc account;
+            switch (invType)
+            {
+                case InvestmentAccType.Corporate:
+                    account = new CorporateInvestmentAcc(ownerName, newAccId, this);
+                    break;
+
+                case InvestmentAccType.Individual:
+                    account = new IndividualInvestmentAcc(ownerName, newAccId, this);
+                    break;
+                default:
+                    throw new NotSupportedException($"investment account type '{invType}' is not supported.");
+            }
+
+            return account;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace BankAppLibrary.Accounts
         /// <summary>
         /// Withdraws a specified positive amount from an account up to $500 and returns the amount withdrawn.
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="amount">the amount added to the balance</param>
         /// <param name="isTransferring">a parameter to override the $500 limit for transfer-withdraws</param>
         /// <returns></returns>
         public override decimal Withdraw(decimal amount, bool isTransferring = false)

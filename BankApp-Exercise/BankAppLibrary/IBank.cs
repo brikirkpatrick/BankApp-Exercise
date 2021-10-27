@@ -6,9 +6,9 @@ namespace BankAppLibrary
 {
     public interface IBank
     {
-        Dictionary<Guid, Account> Accounts { get; }
         string Name { get; }
         Guid RoutingId { get; }
+        Dictionary<Guid, Account> Accounts { get; }
         IRoutingSystem RoutingSystem { get; set; }
 
         Account GetAccountById(Guid accId);
