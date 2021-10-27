@@ -8,6 +8,7 @@ namespace BankAppLibrary.Accounts
         {
         }
 
+        // Note: This method works with the assumption that withdraws over $500 for this account type are fine is the withdrawal is transfer related.
         /// <summary>
         /// Withdraws a specified positive amount from an account up to $500 and returns the amount withdrawn.
         /// </summary>
